@@ -1,0 +1,43 @@
+{:itonami.blueprint/id "cloud-itonami-isic-0161"
+ :itonami.blueprint/name "Support Activities For Crop Production Coordination"
+ :itonami.blueprint/isic-rev5 "0161"
+ :itonami.blueprint/domain :agriculture/crop-support-services
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:food-security :farm-labor-efficiency :pesticide-safety]
+ :itonami.blueprint/governor :cropsupport-governor
+ :itonami.blueprint/robotics false
+ :itonami.blueprint/required-technologies [:identity :forms :audit-ledger]
+ :itonami.blueprint/optional-technologies [:telemetry]
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/maturity :implemented
+ :itonami.blueprint/implemented-slice
+ "`:cropsupport-governor` is implemented end-to-end in `src/cropsupport` as
+ a CROP-SUPPORT-SERVICE OPERATIONS COORDINATION actor -- CropSupport
+ Advisor (LLM proposal-only) ⊣ Crop-Support Operations Governor (closed-op-
+ allowlist / service-order-registration-before-any-action hard-gate /
+ applicator-license-sprayer-calibration-pre-harvest-interval-restricted-
+ entry-interval-wind-speed-buffer-zone hard-gates / unresolved-crop-
+ health-flag hard-gate / field-equipment-and-pesticide-decision permanent
+ block). `:itonami.blueprint/robotics` is honestly `false` -- this actor
+ holds NO combine/sprayer/applicator field-equipment-control authority (a
+ HARD, permanent governor block, never overridable by human approval --
+ see `cropsupport.governor` ns docstring). ISIC Rev.5 0161 covers CUSTOM
+ FARM WORK performed for OTHER farms' crops on a fee/contract basis
+ (harvesting, spraying, pest-control) -- the operator never owns the crop
+ being serviced, which is what distinguishes this actor from the growing
+ divisions (011x) themselves. Every one of its four proposal ops
+ (`:log-service-record` / `:schedule-field-operation` /
+ `:flag-crop-health-concern` / `:order-supplies`) carries `:effect
+ :propose` ONLY -- the governor HARD-holds any proposal that doesn't
+ (`effect-not-propose-violations`). Service types split into mechanical
+ harvest (combine/hay-baling, no chemical-application safety window at
+ all) and chemical-application (herbicide/fungicide/insecticide, a
+ genuine pre-harvest interval, restricted-entry interval, maximum safe
+ wind speed, and minimum buffer zone) -- the Governor's chemical-specific
+ checks are skipped entirely, never fabricated, for mechanical service
+ types. `:flag-crop-health-concern` always escalates to a human, at every
+ phase, regardless of advisor confidence; `:order-supplies` above a cost
+ threshold likewise always escalates. This build ships NO JVM-only
+ interop anywhere in `src/` (all source is `.cljc`) per this workspace's
+ cljs-first runtime-priority rule. See `README.md` for the full
+ governor-check enumeration."}
