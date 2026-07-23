@@ -9,7 +9,7 @@
  :itonami.blueprint/required-technologies [:identity :forms :audit-ledger]
  :itonami.blueprint/optional-technologies [:telemetry]
  :itonami.blueprint/status :public-oss
- :itonami.blueprint/maturity :implemented
+ :itonami.blueprint/maturity :blueprint
  :itonami.blueprint/implemented-slice
  "`:cropsupport-governor` is implemented end-to-end in `src/cropsupport` as
  a CROP-SUPPORT-SERVICE OPERATIONS COORDINATION actor -- CropSupport
