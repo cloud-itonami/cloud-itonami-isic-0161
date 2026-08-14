@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cloud-itonami-isic-0161 · 作物生産支援サービス Operator Console</title>
+<style>:root{--ink:#1a1a1c;--muted:#626264;--line:#d8d8db;--bg:#ffffff;
+--ok-bg:#e6f5ec;--ok-fg:#115a36;--warn-bg:#ffeee2;--warn-fg:#ac3e00;
+--crit-bg:#fdeeee;--crit-fg:#ce0000;--info-bg:#e8f1fe;--info-fg:#0017c1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font-family:system-ui,-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif;
+font-size:14px;line-height:1.6}
+header{padding:24px 20px;border-bottom:2px solid var(--info-fg);background:var(--info-bg)}
+header h1{margin:0 0 6px;font-size:20px;line-height:1.4}
+header p{margin:0;color:var(--muted);font-size:13px}
+.badge{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:11px;
+background:var(--bg);border:1px solid var(--info-fg);color:var(--info-fg);font-size:12px}
+main{padding:8px 20px 48px;max-width:1200px}
+section{margin:28px 0 0;border-top:1px solid var(--line);padding-top:20px}
+h2{font-size:16px;margin:0 0 4px}
+.lead{margin:0 0 12px;color:var(--muted);font-size:13px;max-width:78ch}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:#f4f4f6;font-weight:600;white-space:nowrap}
+tbody tr:hover{background:#fafafb}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+span.ok{color:var(--ok-fg);background:var(--ok-bg);padding:1px 7px;border-radius:3px}
+span.warn{color:var(--warn-fg);background:var(--warn-bg);padding:1px 7px;border-radius:3px}
+span.critical{color:var(--crit-fg);background:var(--crit-bg);padding:1px 7px;border-radius:3px;font-weight:600}
+span.muted{color:var(--muted)}
+footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}</style>
+</head>
+<body>
+<header>
+  <h1>Support activities for crop production (ISIC Rev.5 0161) — Operator Console</h1>
+  <p>受託作業 (custom farm work) の service-order を、CropSupport Advisor ⊣ Crop-Support Operations Governor で統制した結果のスナップショット。</p>
+  <p class="badge">read-only sample · build-time generated · <code>clojure -M:dev:render-html</code></p>
+</header>
+<main>
+  <section>
+    <h2>Service orders (client-farm engagements)</h2>
+    <p class="lead">ISIC Rev.5 0161 は他の農家の作物に対する受託作業である。ここに出る 11 件はすべて seed で登録された service-order で、作業種別名・法域名は cropsupport.facts の登録値をそのまま引いている。</p>
+    <table>
+      <thead><tr><th>Service order</th><th>Client farm</th><th>作業種別</th><th>法域</th><th>面積(ha)</th><th>化学散布</th><th>ライフサイクル</th><th>直近のdisposition</th></tr></thead>
+      <tbody>
+      <tr><td><code>so-1001</code></td><td>farm-42</td><td>除草剤散布(ブロードキャスト)</td><td>日本 (農薬取締法・農林水産省)</td><td>12.5</td><td><span class="warn">あり</span></td><td><span class="ok">記録済み</span></td><td><span class="critical">HARD hold · already-logged</span></td></tr>
+      <tr><td><code>so-1002</code></td><td>farm-77</td><td>穀物コンバイン収穫作業</td><td>日本 (農薬取締法・農林水産省)</td><td>31.0</td><td><span class="muted">なし</span></td><td><span class="ok">記録済み</span></td><td><span class="ok">承認のうえコミット</span></td></tr>
+      <tr><td><code>so-1003</code></td><td>farm-19</td><td>地上防除(殺虫剤散布)</td><td>United States (FIFRA / EPA Pesticide Regulation)</td><td>8.25</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · applicator-license-expired</span></td></tr>
+      <tr><td><code>so-1004</code></td><td>farm-63</td><td>除草剤散布(ブロードキャスト)</td><td>United States (FIFRA / EPA Pesticide Regulation)</td><td>16.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · sprayer-calibration-overdue</span></td></tr>
+      <tr><td><code>so-1005</code></td><td>farm-88</td><td>地上防除(殺虫剤散布)</td><td>European Union (Regulation (EC) No 1107/2009 on plant protection products)</td><td>5.5</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · pre-harvest-interval-violated</span></td></tr>
+      <tr><td><code>so-1006</code></td><td>farm-104</td><td>除草剤散布(ブロードキャスト)</td><td>日本 (農薬取締法・農林水産省)</td><td>22.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · restricted-entry-interval-violated</span></td></tr>
+      <tr><td><code>so-1007</code></td><td>farm-51</td><td>除草剤散布(ブロードキャスト)</td><td>United States (FIFRA / EPA Pesticide Regulation)</td><td>18.75</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · wind-speed-exceeded</span></td></tr>
+      <tr><td><code>so-1008</code></td><td>farm-66</td><td>地上防除(殺虫剤散布)</td><td>日本 (農薬取締法・農林水産省)</td><td>9.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · buffer-zone-violated</span></td></tr>
+      <tr><td><code>so-1009</code></td><td>farm-73</td><td>殺菌剤葉面散布</td><td>European Union (Regulation (EC) No 1107/2009 on plant protection products)</td><td>14.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · crop-health-flag-unresolved</span></td></tr>
+      <tr><td><code>so-1010</code></td><td>farm-95</td><td>殺菌剤葉面散布</td><td>日本 (農薬取締法・農林水産省)</td><td>6.5</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · evidence-incomplete</span></td></tr>
+      <tr><td><code>so-1011</code></td><td>farm-12</td><td>除草剤散布(ブロードキャスト)</td><td>日本 (農薬取締法・農林水産省)</td><td>27.5</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · field-equipment-or-pesticide-decision-blocked</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Service-type safety windows</h2>
+    <p class="lead">cropsupport.facts/service-types の登録値をそのまま表示している。機械収穫作業には化学散布の安全ウィンドウが構造的に存在せず、Governor は該当検査を「捏造した基準で判定する」のではなく丸ごとスキップする。</p>
+    <table>
+      <thead><tr><th>Service type</th><th>名称</th><th>化学散布</th><th>収穫前日数(PHI)</th><th>再入場猶予(REI)</th><th>最大風速</th><th>最小緩衝地帯</th></tr></thead>
+      <tbody>
+      <tr><td><code>harvest/combine-grain</code></td><td>穀物コンバイン収穫作業</td><td><span class="muted">なし</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td></tr>
+      <tr><td><code>harvest/hay-baling</code></td><td>牧草刈取・梱包作業</td><td><span class="muted">なし</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td></tr>
+      <tr><td><code>pest-control/insecticide-ground</code></td><td>地上防除(殺虫剤散布)</td><td><span class="warn">あり</span></td><td>21 日</td><td>24 時間</td><td>16.0 km/h</td><td>30.0 m</td></tr>
+      <tr><td><code>spray/fungicide-foliar</code></td><td>殺菌剤葉面散布</td><td><span class="warn">あり</span></td><td>7 日</td><td>12 時間</td><td>24.0 km/h</td><td>15.0 m</td></tr>
+      <tr><td><code>spray/herbicide-broadcast</code></td><td>除草剤散布(ブロードキャスト)</td><td><span class="warn">あり</span></td><td>14 日</td><td>12 時間</td><td>24.0 km/h</td><td>15.0 m</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Per-order safety verification (independently derived)</h2>
+    <p class="lead">各セルは cropsupport.facts の positive-sense 述語 (applicator-license-current? / sprayer-calibration-current? / pre-harvest-interval-satisfied? / restricted-entry-interval-satisfied? / wind-speed-in-range? / buffer-zone-in-range? / required-evidence-satisfied?) を実際に呼んだ結果である。advisor の確信度はここには一切入らない。日付は絶対時刻ではなく seed のオフセット日数で示す (ページを決定論的に保つため)。</p>
+    <table>
+      <thead><tr><th>Service order</th><th>散布者資格</th><th>機器校正</th><th>収穫前日数</th><th>再入場猶予</th><th>散布時風速</th><th>緩衝地帯</th><th>証拠書類</th></tr></thead>
+      <tbody>
+      <tr><td><code>so-1001</code></td><td><span class="ok">基準時刻+400日</span></td><td><span class="ok">12日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 14日</span></td><td><span class="ok">24時間 / 基準 12時間</span></td><td><span class="ok">10.0 / 上限 24.0 km/h</span></td><td><span class="ok">20.0 / 下限 15.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1002</code></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1003</code></td><td><span class="critical">基準時刻-30日</span></td><td><span class="ok">20日前 / 基準 90日以内</span></td><td><span class="ok">30日 / 基準 21日</span></td><td><span class="ok">36時間 / 基準 24時間</span></td><td><span class="ok">8.0 / 上限 16.0 km/h</span></td><td><span class="ok">40.0 / 下限 30.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1004</code></td><td><span class="ok">基準時刻+210日</span></td><td><span class="critical">400日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 14日</span></td><td><span class="ok">24時間 / 基準 12時間</span></td><td><span class="ok">9.5 / 上限 24.0 km/h</span></td><td><span class="ok">18.0 / 下限 15.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1005</code></td><td><span class="ok">基準時刻+150日</span></td><td><span class="ok">30日前 / 基準 90日以内</span></td><td><span class="critical">9日 / 基準 21日</span></td><td><span class="ok">36時間 / 基準 24時間</span></td><td><span class="ok">8.0 / 上限 16.0 km/h</span></td><td><span class="ok">40.0 / 下限 30.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1006</code></td><td><span class="ok">基準時刻+300日</span></td><td><span class="ok">8日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 14日</span></td><td><span class="critical">4時間 / 基準 12時間</span></td><td><span class="ok">11.0 / 上限 24.0 km/h</span></td><td><span class="ok">20.0 / 下限 15.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1007</code></td><td><span class="ok">基準時刻+260日</span></td><td><span class="ok">15日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 14日</span></td><td><span class="ok">24時間 / 基準 12時間</span></td><td><span class="critical">31.0 / 上限 24.0 km/h</span></td><td><span class="ok">20.0 / 下限 15.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1008</code></td><td><span class="ok">基準時刻+190日</span></td><td><span class="ok">25日前 / 基準 90日以内</span></td><td><span class="ok">30日 / 基準 21日</span></td><td><span class="ok">36時間 / 基準 24時間</span></td><td><span class="ok">8.0 / 上限 16.0 km/h</span></td><td><span class="critical">12.0 / 下限 30.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1009</code></td><td><span class="ok">基準時刻+320日</span></td><td><span class="ok">18日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 7日</span></td><td><span class="ok">24時間 / 基準 12時間</span></td><td><span class="ok">12.0 / 上限 24.0 km/h</span></td><td><span class="ok">20.0 / 下限 15.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      <tr><td><code>so-1010</code></td><td><span class="ok">基準時刻+275日</span></td><td><span class="ok">6日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 7日</span></td><td><span class="ok">24時間 / 基準 12時間</span></td><td><span class="ok">10.5 / 上限 24.0 km/h</span></td><td><span class="ok">20.0 / 下限 15.0 m</span></td><td><span class="critical">4/6 · 不足: weather-log, buffer-zone-assessment</span></td></tr>
+      <tr><td><code>so-1011</code></td><td><span class="ok">基準時刻+365日</span></td><td><span class="ok">3日前 / 基準 90日以内</span></td><td><span class="ok">20日 / 基準 14日</span></td><td><span class="ok">24時間 / 基準 12時間</span></td><td><span class="ok">7.5 / 上限 24.0 km/h</span></td><td><span class="ok">25.0 / 下限 15.0 m</span></td><td><span class="ok">6/6</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Action gate (Crop-Support Operations Governor)</h2>
+    <p class="lead">この表は governor/allowed-ops · high-stakes · always-escalate-ops · confidence-floor · supply-order-cost-threshold-usd を実行時に読んで組み立てている。HARD hold は人の承認で覆せない。</p>
+    <table>
+      <thead><tr><th>Op</th><th>ゲート</th></tr></thead>
+      <tbody>
+      <tr><td><code>flag-crop-health-concern</code></td><td><span class="warn">常に人の承認 (確信度では自動解決されない)</span></td></tr>
+      <tr><td><code>log-service-record</code></td><td><span class="warn">常に人の承認 (高リスク作動 · high-stakes)</span></td></tr>
+      <tr><td><code>order-supplies</code></td><td><span class="warn">金額が数値かつ 5000 USD 以下と確認できたときのみ自動。不明・非数値・超過は人へ</span></td></tr>
+      <tr><td><code>schedule-field-operation</code></td><td><span class="ok">hard違反なし・確信度が床以上なら自動コミット</span></td></tr>
+      </tbody>
+    </table>
+    <p class="lead">確信度の床は 0.6 · 資材発注の閾値は 5000 USD · 許可された op は 4 種のみ (それ以外は恒久ブロック)。</p>
+  </section>
+  <section>
+    <h2>この actor が持たない権限</h2>
+    <p class="lead">圃場機器 (コンバイン・散布機・散布装置) の直接操作と、農薬散布の最終決定は HARD かつ恒久のブロックであり、人の承認でも覆らない。これは risk judgment ではなく scope boundary である。allowlist の外の op であることに加え、提案の :value に秘匿された要求も defense-in-depth として毎回検査される。</p>
+    <table>
+      <thead><tr><th>ブロック</th><th>検査対象</th><th>覆せるか</th></tr></thead>
+      <tbody>
+      <tr><td><code>:op-not-allowed</code></td><td>request の :op が allowed-ops (4 種) の外</td><td><span class="critical">覆せない</span></td></tr>
+      <tr><td><code>:field-equipment-or-pesticide-decision-blocked</code></td><td>提案の :value の :operate-field-equipment? / :finalize-pesticide-application-decision?</td><td><span class="critical">覆せない</span></td></tr>
+      <tr><td><code>:effect-not-propose</code></td><td>提案の :effect が :propose 以外</td><td><span class="critical">覆せない</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Phase machine</h2>
+    <p class="lead">cropsupport.phase/phase-sequence と can-transition? を実際に呼んだ結果。前進のみで、後戻りは許されない。</p>
+    <table>
+      <thead><tr><th>From</th><th>To</th><th>遷移可否</th></tr></thead>
+      <tbody>
+      <tr><td><code>intake</code></td><td><code>survey</code></td><td><span class="ok">可</span></td></tr>
+      <tr><td><code>survey</code></td><td><code>advise</code></td><td><span class="ok">可</span></td></tr>
+      <tr><td><code>advise</code></td><td><code>treat</code></td><td><span class="ok">可</span></td></tr>
+      <tr><td><code>treat</code></td><td><code>record</code></td><td><span class="ok">可</span></td></tr>
+      <tr><td><code>record</code></td><td><code>audit</code></td><td><span class="ok">可</span></td></tr>
+      <tr><td><code>:record</code></td><td><code>:survey</code></td><td><span class="critical">不可 (後戻り)</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Run trace (this scenario)</h2>
+    <p class="lead">全 23 ステップ。disposition は governor/check の判定そのもので、HARD hold の行は人に上がっていない (approval が書かれていても無視される)。</p>
+    <table>
+      <thead><tr><th>#</th><th>ステップ</th><th>Op</th><th>Service order</th><th>確信度</th><th>Disposition</th><th>根拠 / 理由</th></tr></thead>
+      <tbody>
+      <tr><td>1</td><td>圃場作業の予定登録</td><td><code>schedule-field-operation</code></td><td><code>so-1001</code></td><td>0.9</td><td><span class="ok">自動コミット</span></td><td>—</td></tr>
+      <tr><td>2</td><td>資材発注 (閾値未満・金額申告あり)</td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>0.88</td><td><span class="ok">自動コミット</span></td><td>—</td></tr>
+      <tr><td>3</td><td>資材発注 (閾値超過)</td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>0.93</td><td><span class="warn">人が差戻し</span></td><td>supply-cost-above-threshold</td></tr>
+      <tr><td>4</td><td>資材発注 (金額の申告なし)</td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>0.99</td><td><span class="warn">人が差戻し</span></td><td>supply-cost-unverifiable</td></tr>
+      <tr><td>5</td><td>作業記録の登録 (高リスク作動)</td><td><code>log-service-record</code></td><td><code>so-1001</code></td><td>0.95</td><td><span class="ok">人が承認</span></td><td>high-stakes-actuation</td></tr>
+      <tr><td>6</td><td>作業記録の二重登録の試行</td><td><code>log-service-record</code></td><td><code>so-1001</code></td><td>0.97</td><td><span class="critical">HARD hold</span></td><td>already-logged</td></tr>
+      <tr><td>7</td><td>圃場作業の予定登録 (advisor確信度が低い)</td><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td>0.45</td><td><span class="ok">人が承認</span></td><td>confidence-below-floor</td></tr>
+      <tr><td>8</td><td>作業記録の登録 (機械収穫)</td><td><code>log-service-record</code></td><td><code>so-1002</code></td><td>0.9</td><td><span class="ok">人が承認</span></td><td>high-stakes-actuation</td></tr>
+      <tr><td>9</td><td>作業記録の登録 (散布者資格) (承認は届かない)</td><td><code>log-service-record</code></td><td><code>so-1003</code></td><td>0.92</td><td><span class="critical">HARD hold</span></td><td>applicator-license-expired</td></tr>
+      <tr><td>10</td><td>作業記録の登録 (機器校正)</td><td><code>log-service-record</code></td><td><code>so-1004</code></td><td>0.9</td><td><span class="critical">HARD hold</span></td><td>sprayer-calibration-overdue</td></tr>
+      <tr><td>11</td><td>作業記録の登録 (収穫前日数)</td><td><code>log-service-record</code></td><td><code>so-1005</code></td><td>0.91</td><td><span class="critical">HARD hold</span></td><td>pre-harvest-interval-violated</td></tr>
+      <tr><td>12</td><td>作業記録の登録 (再入場猶予)</td><td><code>log-service-record</code></td><td><code>so-1006</code></td><td>0.89</td><td><span class="critical">HARD hold</span></td><td>restricted-entry-interval-violated</td></tr>
+      <tr><td>13</td><td>作業記録の登録 (散布時風速)</td><td><code>log-service-record</code></td><td><code>so-1007</code></td><td>0.94</td><td><span class="critical">HARD hold</span></td><td>wind-speed-exceeded</td></tr>
+      <tr><td>14</td><td>作業記録の登録 (緩衝地帯)</td><td><code>log-service-record</code></td><td><code>so-1008</code></td><td>0.9</td><td><span class="critical">HARD hold</span></td><td>buffer-zone-violated</td></tr>
+      <tr><td>15</td><td>作物健全性フラグの起票</td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>0.99</td><td><span class="ok">人が承認</span></td><td>always-escalate-op</td></tr>
+      <tr><td>16</td><td>作業記録の登録 (作物健全性フラグ未解決)</td><td><code>log-service-record</code></td><td><code>so-1009</code></td><td>0.96</td><td><span class="critical">HARD hold</span></td><td>crop-health-flag-unresolved</td></tr>
+      <tr><td>17</td><td>作業記録の登録 (証拠書類)</td><td><code>log-service-record</code></td><td><code>so-1010</code></td><td>0.93</td><td><span class="critical">HARD hold</span></td><td>evidence-incomplete</td></tr>
+      <tr><td>18</td><td>作業記録の登録 (法域引用なし)</td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>0.95</td><td><span class="critical">HARD hold</span></td><td>no-spec-basis</td></tr>
+      <tr><td>19</td><td>散布機の直接操作の要求 (許可外op)</td><td><code>operate-sprayer</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>op-not-allowed</td></tr>
+      <tr><td>20</td><td>予定登録を :commit として主張</td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>effect-not-propose</td></tr>
+      <tr><td>21</td><td>予定登録に圃場機器の直接操作を秘匿</td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>22</td><td>作業記録に農薬散布の最終決定を秘匿</td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>23</td><td>未登録のservice-orderへの予定登録</td><td><code>schedule-field-operation</code></td><td><code>so-9999</code></td><td>0.9</td><td><span class="critical">HARD hold</span></td><td>service-order-not-registered</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Audit ledger (append-only, this run)</h2>
+    <p class="lead">store/audit-trail が返す 29 件。governor-hold の行は cropsupport.governor/hold-fact が構成した本物である。それ以外の fact 種別 (auto-commit / approval-requested / approval-granted / approval-refused) はこの driver が組み立てている — repo は hold-fact 以外の fact コンストラクタを持たない (下の gap 節を参照)。</p>
+    <table>
+      <thead><tr><th>#</th><th>Fact</th><th>Op</th><th>Service order</th><th>Disposition</th><th>根拠</th></tr></thead>
+      <tbody>
+      <tr><td>1</td><td><code>auto-commit</code></td><td><code>schedule-field-operation</code></td><td><code>so-1001</code></td><td>auto</td><td>—</td></tr>
+      <tr><td>2</td><td><code>auto-commit</code></td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>auto</td><td>—</td></tr>
+      <tr><td>3</td><td><code>approval-requested</code></td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>escalated</td><td>supply-cost-above-threshold</td></tr>
+      <tr><td>4</td><td><code>approval-refused</code></td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>refused</td><td>supply-cost-above-threshold</td></tr>
+      <tr><td>5</td><td><code>approval-requested</code></td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>escalated</td><td>supply-cost-unverifiable</td></tr>
+      <tr><td>6</td><td><code>approval-refused</code></td><td><code>order-supplies</code></td><td><code>so-1001</code></td><td>refused</td><td>supply-cost-unverifiable</td></tr>
+      <tr><td>7</td><td><code>approval-requested</code></td><td><code>log-service-record</code></td><td><code>so-1001</code></td><td>escalated</td><td>high-stakes-actuation</td></tr>
+      <tr><td>8</td><td><code>approval-granted</code></td><td><code>log-service-record</code></td><td><code>so-1001</code></td><td>approved</td><td>high-stakes-actuation</td></tr>
+      <tr><td>9</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1001</code></td><td>hold</td><td>already-logged</td></tr>
+      <tr><td>10</td><td><code>approval-requested</code></td><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td>escalated</td><td>confidence-below-floor</td></tr>
+      <tr><td>11</td><td><code>approval-granted</code></td><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td>approved</td><td>confidence-below-floor</td></tr>
+      <tr><td>12</td><td><code>approval-requested</code></td><td><code>log-service-record</code></td><td><code>so-1002</code></td><td>escalated</td><td>high-stakes-actuation</td></tr>
+      <tr><td>13</td><td><code>approval-granted</code></td><td><code>log-service-record</code></td><td><code>so-1002</code></td><td>approved</td><td>high-stakes-actuation</td></tr>
+      <tr><td>14</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1003</code></td><td>hold</td><td>applicator-license-expired</td></tr>
+      <tr><td>15</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1004</code></td><td>hold</td><td>sprayer-calibration-overdue</td></tr>
+      <tr><td>16</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1005</code></td><td>hold</td><td>pre-harvest-interval-violated</td></tr>
+      <tr><td>17</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1006</code></td><td>hold</td><td>restricted-entry-interval-violated</td></tr>
+      <tr><td>18</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1007</code></td><td>hold</td><td>wind-speed-exceeded</td></tr>
+      <tr><td>19</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1008</code></td><td>hold</td><td>buffer-zone-violated</td></tr>
+      <tr><td>20</td><td><code>approval-requested</code></td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>escalated</td><td>always-escalate-op</td></tr>
+      <tr><td>21</td><td><code>approval-granted</code></td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>approved</td><td>always-escalate-op</td></tr>
+      <tr><td>22</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1009</code></td><td>hold</td><td>crop-health-flag-unresolved</td></tr>
+      <tr><td>23</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1010</code></td><td>hold</td><td>evidence-incomplete</td></tr>
+      <tr><td>24</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>hold</td><td>no-spec-basis</td></tr>
+      <tr><td>25</td><td><code>governor-hold</code></td><td><code>operate-sprayer</code></td><td><code>so-1011</code></td><td>hold</td><td>op-not-allowed</td></tr>
+      <tr><td>26</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>hold</td><td>effect-not-propose</td></tr>
+      <tr><td>27</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>hold</td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>28</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>hold</td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>29</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-9999</code></td><td>hold</td><td>service-order-not-registered</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>HARD holds observed (derived from the ledger)</h2>
+    <p class="lead">台帳を走査して組み立てている。HARD hold は合計 15 件、異なる規則は 14 種。ここに出るのは「この run が実際に踏んだ規則」であって、Governor が実装している全規則の一覧ではない — 後者を主張するには、規則の目録を手で書き写すことになり、それは腐る。</p>
+    <table>
+      <thead><tr><th>Hard rule</th><th>件数</th><th>対象 service order</th></tr></thead>
+      <tbody>
+      <tr><td><code>already-logged</code></td><td>1</td><td><code>so-1001</code></td></tr>
+      <tr><td><code>applicator-license-expired</code></td><td>1</td><td><code>so-1003</code></td></tr>
+      <tr><td><code>buffer-zone-violated</code></td><td>1</td><td><code>so-1008</code></td></tr>
+      <tr><td><code>crop-health-flag-unresolved</code></td><td>1</td><td><code>so-1009</code></td></tr>
+      <tr><td><code>effect-not-propose</code></td><td>1</td><td><code>so-1011</code></td></tr>
+      <tr><td><code>evidence-incomplete</code></td><td>1</td><td><code>so-1010</code></td></tr>
+      <tr><td><code>field-equipment-or-pesticide-decision-blocked</code></td><td>2</td><td><code>so-1011</code></td></tr>
+      <tr><td><code>no-spec-basis</code></td><td>1</td><td><code>so-1011</code></td></tr>
+      <tr><td><code>op-not-allowed</code></td><td>1</td><td><code>so-1011</code></td></tr>
+      <tr><td><code>pre-harvest-interval-violated</code></td><td>1</td><td><code>so-1005</code></td></tr>
+      <tr><td><code>restricted-entry-interval-violated</code></td><td>1</td><td><code>so-1006</code></td></tr>
+      <tr><td><code>service-order-not-registered</code></td><td>1</td><td><code>so-9999</code></td></tr>
+      <tr><td><code>sprayer-calibration-overdue</code></td><td>1</td><td><code>so-1004</code></td></tr>
+      <tr><td><code>wind-speed-exceeded</code></td><td>1</td><td><code>so-1007</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Approver attribution (measured at render time, not asserted)</h2>
+    <p class="lead">「誰が承認したか」を後から店側の記録だけで答えられるか、を run のたびに 実測している。判定は台帳の approval-granted fact と、対応する service-order 記録の両方を approved-by / approver / approval-by / by / signed-off-by / payload / value で走査した結果であり、ハードコードした結論ではない — scaffold が直れば、この節の判定も自動的に変わる。</p>
+    <table>
+      <thead><tr><th>Op</th><th>Service order</th><th>台帳に承認者が残るか</th><th>service-order記録に残るか</th></tr></thead>
+      <tbody>
+      <tr><td><code>log-service-record</code></td><td><code>so-1001</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td></tr>
+      <tr><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td></tr>
+      <tr><td><code>log-service-record</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td></tr>
+      <tr><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">残らない</span></td></tr>
+      </tbody>
+    </table>
+    <p class="lead">実測結果 (部分的欠落): 承認を伴うコミット 4 件のうち 3 件は記録側にも承認者が残るが、1 件は台帳にしか残らない。原因は store/mark-scheduled が payload 引数をそもそも取らないことで、承認者を service-order 記録に添えるすべが無い。読み手が「誰も承認していない」と「店が承認者を保持していない」を区別できるよう、ここに明示する。これは governance contract を持つセマンティクスなので、このページは開示するだけで修正しない。</p>
+  </section>
+  <section>
+    <h2>Scaffold gaps measured on this run</h2>
+    <p class="lead">以下は「そうであるはずだ」ではなく、この run を観測して derive したものである。いずれも governance semantics に関わるため、このページは開示するだけで修正しない。</p>
+    <table>
+      <thead><tr><th>観測</th><th>測り方</th><th>結果</th></tr></thead>
+      <tbody>
+      <tr><td>run-operation は成功時に audit fact を返さない</td><td>自動コミットしたステップの (:facts outcome) を数えた</td><td><span class="critical">自動コミット 2 件すべてで fact 0 件 — コミットは台帳に痕跡を残さない</span></td></tr>
+      <tr><td>verdict は「なぜ escalate したか」を答えない</td><td>全ステップの verdict の key を和集合にした</td><td><span class="warn">confidence, escalate?, hard?, high-stakes?, ok?, violations</span></td></tr>
+      <tr><td>4つの許可 op のうち store に writer があるのは</td><td>ns-publics 'cropsupport.store と allowed-ops を突き合わせた</td><td><code>flag-crop-health-concern</code> → <span class="critical">writer 無し (台帳のみ)</span><br><code>log-service-record</code> → <span class="ok">store/log-service-record</span><br><code>order-supplies</code> → <span class="critical">writer 無し (台帳のみ)</span><br><code>schedule-field-operation</code> → <span class="ok">store/mark-scheduled</span></td></tr>
+      <tr><td>store の公開 API</td><td>ns-publics 'cropsupport.store</td><td><code>append-fact</code> · <code>audit-trail</code> · <code>log-service-record</code> · <code>mark-scheduled</code> · <code>service-order</code> · <code>service-order-already-logged?</code> · <code>service-order-registered?</code></td></tr>
+      <tr><td>store/mark-scheduled は payload を取らない</td><td>予定登録が承認された order の記録に承認者キーがあるか走査した</td><td><span class="ok">承認者が記録に残っている</span></td></tr>
+      <tr><td>repo が定義する fact コンストラクタ</td><td>cropsupport.governor の公開 var を確認した</td><td><span class="warn">governor/hold-fact のみ。auto-commit / approval-* の fact 形は driver 側が定義している</span></td></tr>
+      <tr><td>cropsupport.sim (clojure -M:dev:run)</td><td>このファイルを書く前に実行した</td><td><span class="critical">スタブ (&quot;not yet implemented&quot;) — 再利用できる scenario は無い</span></td></tr>
+      <tr><td>langgraph StateGraph</td><td>deps.edn の :deps と cropsupport.advisor を確認した</td><td><span class="warn">:deps {} は空で、:dev の :override-deps は何も override しない。advisor は空のスケルトンで graph builder が無い — この renderer は operation/run-operation の seam を直接駆動する</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+<footer>
+  このページは <code>cropsupport.render-html</code> が build 時に生成している。全ての verdict は <code>cropsupport.governor/check</code> の実出力、全ての閾値は <code>cropsupport.facts</code> の登録値、全ての HARD hold fact は <code>cropsupport.governor/hold-fact</code> の実出力である。ページ内に時刻を持たないため、同一 seed に対して再実行すると byte 単位で一致する。
+</footer>
+</body>
+</html>
