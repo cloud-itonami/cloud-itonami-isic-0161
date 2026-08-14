@@ -230,15 +230,15 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
     <h2>Approver attribution (measured at render time, not asserted)</h2>
     <p class="lead">「誰が承認したか」を後から店側の記録だけで答えられるか、を run のたびに 実測している。判定は台帳の approval-granted fact と、対応する service-order 記録の両方を approved-by / approver / approval-by / by / signed-off-by / payload / value で走査した結果であり、ハードコードした結論ではない — scaffold が直れば、この節の判定も自動的に変わる。</p>
     <table>
-      <thead><tr><th>Op</th><th>Service order</th><th>台帳に承認者が残るか</th><th>service-order記録に残るか</th></tr></thead>
+      <thead><tr><th>Op</th><th>Service order</th><th>台帳に承認者が残るか</th><th>service-order記録に残るか</th><th>この op の writer が承認者を書けるか</th></tr></thead>
       <tbody>
-      <tr><td><code>log-service-record</code></td><td><code>so-1001</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td></tr>
-      <tr><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td></tr>
-      <tr><td><code>log-service-record</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td></tr>
-      <tr><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">残らない</span></td></tr>
+      <tr><td><code>log-service-record</code></td><td><code>so-1001</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">store/log-service-record (3 引数)</span></td></tr>
+      <tr><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">書けない — store/mark-scheduled は 2 引数</span></td></tr>
+      <tr><td><code>log-service-record</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">store/log-service-record (3 引数)</span></td></tr>
+      <tr><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">残らない</span></td><td><span class="critical">書けない — writer が無い</span></td></tr>
       </tbody>
     </table>
-    <p class="lead">実測結果 (部分的欠落): 承認を伴うコミット 4 件のうち 3 件は記録側にも承認者が残るが、1 件は台帳にしか残らない。原因は store/mark-scheduled が payload 引数をそもそも取らないことで、承認者を service-order 記録に添えるすべが無い。読み手が「誰も承認していない」と「店が承認者を保持していない」を区別できるよう、ここに明示する。これは governance contract を持つセマンティクスなので、このページは開示するだけで修正しない。</p>
+    <p class="lead">実測結果 (部分的欠落): 承認を伴うコミット 4 件のうち 3 件は記録側にも承認者が残るが、1 件は台帳にしか残らない。欠落の内訳 (writer 表から導出): flag-crop-health-concern: store に writer が無く記録自体が変わらない (台帳のみ)。なお最終列が critical の行は、記録に承認者が見えていてもそれを書いたのはその op ではなく、同じ service-order に対する後続の別 op である — この run では該当が 1 件ある。読み手が「誰も承認していない」と「店が承認者を保持していない」を区別できるよう、ここに明示する。これは governance contract を持つセマンティクスなので、このページは開示するだけで修正しない。</p>
   </section>
   <section>
     <h2>Scaffold gaps measured on this run</h2>

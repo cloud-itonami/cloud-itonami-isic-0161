@@ -384,12 +384,38 @@
            (> cost governor/supply-order-cost-threshold-usd))
       (conj :supply-cost-above-threshold))))
 
+(def ^:private store-writers
+  "The ONLY place this file names a store writer. `cropsupport.store`
+  ships writers for two of the four ops in `governor/allowed-ops`; the
+  other two reach the ledger and nowhere else. `commit-effect` and every
+  disclosure on the page read this one map, so a scaffold that grows a
+  writer moves the page in a single edit instead of three."
+  {:log-service-record 'log-service-record
+   :schedule-field-operation 'mark-scheduled})
+
+(defn- writer-arity
+  "Measured parameter count of the store writer for `op`, or nil when the
+  store exposes no writer for it at all. Read off the var's own
+  `:arglists` -- this is how the page ESTABLISHES that a writer has no
+  payload parameter, instead of asserting it in prose that goes stale the
+  moment the scaffold grows one."
+  [op]
+  (when-let [w (store-writers op)]
+    (when-let [v (ns-resolve 'cropsupport.store w)]
+      (count (first (:arglists (meta v)))))))
+
+(defn- carries-payload?
+  "True when this op's store writer has room for anything beyond the
+  store and the id -- i.e. whether an approval could be attached to the
+  record by that writer at all."
+  [op]
+  (boolean (some-> (writer-arity op) (>= 3))))
+
 (defn- commit-effect
   "Applies the store mutation the repo ACTUALLY exposes for a committed
-  op. Measured, not assumed: `cropsupport.store` ships writers for only
-  two of the four ops in `governor/allowed-ops`, and `mark-scheduled`
-  takes no payload at all, so nothing about the approval can be attached
-  to a scheduled order. This function does not paper over either fact."
+  op, per `store-writers`. Ops with no writer there commit to the ledger
+  and change no service-order record -- this function does not paper over
+  that."
   [st op subject approval]
   (case op
     :log-service-record
@@ -471,6 +497,10 @@
                    :reasons (vec reasons)
                    :verdict-keys (set (keys verdict))
                    :run-operation-fact-count (count (:facts outcome))
+                   ;; What `operation/run-operation` ACTUALLY returned for
+                   ;; this step, kept so the page can measure whether it
+                   ;; distinguishes a hard refusal from an escalation.
+                   :run-operation-fact-types (mapv :t (:facts outcome))
                    :approval-ignored? (and hard? (some? approval))})}))
 
 (defn run-demo!
@@ -791,6 +821,26 @@
   [m]
   (some (fn [k] (when-let [v (get m k)] [k v])) (approver-candidate-keys)))
 
+(defn- attribution-loss-cause
+  "Derives WHY the approver did not survive into the store record for
+  `op`, from the measured writer table. Never a hardcoded claim about
+  which writer is at fault: an earlier revision of this page named
+  `store/mark-scheduled` in prose while the row that actually lost the
+  approver was `:flag-crop-health-concern`, which has no writer at all."
+  [op]
+  (let [w (store-writers op)
+        arity (writer-arity op)]
+    (cond
+      (nil? w)
+      (str (kw->s op) ": store に writer が無く記録自体が変わらない (台帳のみ)")
+
+      (and arity (< arity 3))
+      (str (kw->s op) ": store/" w " は " arity
+           " 引数 (store + id) で payload を取らない")
+
+      :else
+      (str (kw->s op) ": store/" w " は payload を取るが承認者が残っていない"))))
+
 (defn- attribution-section [db ledger]
   (let [grants (filter #(= :approval-granted (:t %)) ledger)
         rows (for [g grants
@@ -801,7 +851,12 @@
                {:op (:op g) :subject subject
                 :in-ledger in-ledger :in-record in-record})
         lost (filter #(and (:in-ledger %) (nil? (:in-record %))) rows)
-        kept (filter #(and (:in-ledger %) (:in-record %)) rows)]
+        kept (filter #(and (:in-ledger %) (:in-record %)) rows)
+        lost-causes (str/join " · " (distinct (map #(attribution-loss-cause (:op %)) lost)))
+        ;; A record can show an approver that a LATER op wrote. Measured
+        ;; separately so the table cannot be misread as "this op's writer
+        ;; retained it".
+        kept-by-other (filter #(and (:in-record %) (not (carries-payload? (:op %)))) rows)]
     (section
      "Approver attribution (measured at render time, not asserted)"
      (str "「誰が承認したか」を後から店側の記録だけで答えられるか、を run のたびに "
@@ -811,7 +866,8 @@
           " で走査した結果であり、ハードコードした結論ではない — "
           "scaffold が直れば、この節の判定も自動的に変わる。")
      (str
-      (table ["Op" "Service order" "台帳に承認者が残るか" "service-order記録に残るか"]
+      (table ["Op" "Service order" "台帳に承認者が残るか" "service-order記録に残るか"
+              "この op の writer が承認者を書けるか"]
              (for [{:keys [op subject in-ledger in-record]} rows]
                (tr (tdcode (kw->s op))
                    (tdcode subject)
@@ -820,23 +876,32 @@
                      (tdc "critical" "残らない"))
                    (if in-record
                      (tdc "ok" (str (kw->s (first in-record)) " = " (second in-record)))
-                     (tdc "critical" "残らない")))))
+                     (tdc "critical" "残らない"))
+                   (if (carries-payload? op)
+                     (tdc "ok" (str "store/" (store-writers op) " ("
+                                    (writer-arity op) " 引数)"))
+                     (tdc "critical"
+                          (if-let [w (store-writers op)]
+                            (str "書けない — store/" w " は " (writer-arity op) " 引数")
+                            "書けない — writer が無い"))))))
       "    <p class=\"lead\">"
       (esc
        (cond
          (and (seq lost) (seq kept))
          (str "実測結果 (部分的欠落): 承認を伴うコミット " (count rows) " 件のうち "
               (count kept) " 件は記録側にも承認者が残るが、" (count lost)
-              " 件は台帳にしか残らない。原因は store/mark-scheduled が payload 引数を"
-              "そもそも取らないことで、承認者を service-order 記録に添えるすべが無い。"
-              "読み手が「誰も承認していない」と「店が承認者を保持していない」を"
+              " 件は台帳にしか残らない。欠落の内訳 (writer 表から導出): " lost-causes
+              "。なお最終列が critical の行は、記録に承認者が見えていても"
+              "それを書いたのはその op ではなく、同じ service-order に対する"
+              "後続の別 op である — この run では該当が " (count kept-by-other)
+              " 件ある。読み手が「誰も承認していない」と「店が承認者を保持していない」を"
               "区別できるよう、ここに明示する。これは governance contract を持つ"
               "セマンティクスなので、このページは開示するだけで修正しない。")
 
          (seq lost)
          (str "実測結果 (欠落): 承認を伴うコミット " (count rows)
               " 件すべてで、承認者は台帳にしか残らず service-order 記録からは"
-              "失われている。")
+              "失われている。欠落の内訳 (writer 表から導出): " lost-causes "。")
 
          (seq kept)
          (str "実測結果 (保持): 承認を伴うコミット " (count rows)
