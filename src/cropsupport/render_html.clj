@@ -305,6 +305,18 @@
     :proposal {:effect :propose :cites (cites :jp/maff)
                :value {:jurisdiction :jp/maff} :confidence 0.9}}
 
+   ;; so-1009 is scheduled by an APPROVED proposal and then never logged
+   ;; (its log attempt hard-holds below). That combination is what makes
+   ;; it usable as evidence about `store/mark-scheduled`: on an order that
+   ;; is also logged, `store/log-service-record` takes a payload and would
+   ;; have written the approver itself, so an approver found there says
+   ;; nothing about whether `mark-scheduled` could retain one.
+   {:label "圃場作業の予定登録 (advisor確信度が低い・記録には至らない)"
+    :request {:op :schedule-field-operation :subject "so-1009"}
+    :proposal {:effect :propose :cites [] :value {} :confidence 0.5}
+    :approval {:decision :approved :by approver-id
+               :note "確信度は低いが予定登録のみ — 人が承認"}}
+
    {:label "作物健全性フラグの起票"
     :request {:op :flag-crop-health-concern :subject "so-1009"}
     :proposal {:effect :propose :cites (cites :eu/reg1107)
@@ -915,9 +927,7 @@
   (let [ok-steps (filter #(= :auto-commit (:disposition %)) trace)
         silent-ok (filter #(zero? (:run-operation-fact-count %)) ok-steps)
         verdict-keys (sort-by kw->s (reduce into #{} (map :verdict-keys trace)))
-        store-api (sort (map name (keys (ns-publics 'cropsupport.store))))
-        writers {:log-service-record "log-service-record"
-                 :schedule-field-operation "mark-scheduled"}]
+        store-api (sort (map name (keys (ns-publics 'cropsupport.store))))]
     (section
      "Scaffold gaps measured on this run"
      (str "以下は「そうであるはずだ」ではなく、この run を観測して derive したものである。"
@@ -941,24 +951,49 @@
                       "<br>"
                       (for [op (sort-by kw->s governor/allowed-ops)]
                         (str "<code>" (esc (kw->s op)) "</code> → "
-                             (if-let [w (writers op)]
-                               (str "<span class=\"ok\">store/" (esc w) "</span>")
+                             (if-let [w (store-writers op)]
+                               (str "<span class=\"ok\">store/" (esc w) " ("
+                                    (esc (writer-arity op)) " 引数)</span>")
                                "<span class=\"critical\">writer 無し (台帳のみ)</span>"))))))
 
              (tr (tdt "store の公開 API")
                  (tdt "ns-publics 'cropsupport.store")
                  (td (str/join " · " (map #(str "<code>" (esc %) "</code>") store-api))))
 
-             (tr (tdt "store/mark-scheduled は payload を取らない")
-                 (tdt "予定登録が承認された order の記録に承認者キーがあるか走査した")
-                 (let [scheduled (filter #(:scheduled? (store/service-order db %))
-                                         (map :id order-specs))
-                       any (some #(approver-in (store/service-order db %)) scheduled)]
-                   (if any
+             ;; The claim in the first cell is derived from the writer's
+             ;; own arity, and the evidence set EXCLUDES orders that were
+             ;; also logged: `store/log-service-record` takes a payload,
+             ;; so an approver found on a logged order was written by that
+             ;; op, not by `mark-scheduled`. An earlier revision of this
+             ;; row scanned every scheduled order and therefore reported
+             ;; "承認者が記録に残っている" — crediting this writer for a
+             ;; value a different writer had put there.
+             (let [scheduled (filter #(:scheduled? (store/service-order db %))
+                                     (map :id order-specs))
+                   attributable (remove #(:logged? (store/service-order db %)) scheduled)
+                   with-approver (filter #(approver-in (store/service-order db %))
+                                         attributable)
+                   w (store-writers :schedule-field-operation)]
+               (tr (tdt (str "store/" w " は " (writer-arity :schedule-field-operation)
+                             " 引数 (store + id) で payload を取らない"))
+                   (tdt (str "予定登録済みだが未記録の order " (count attributable)
+                             " 件を走査した (記録済みの order は "
+                             "store/log-service-record が承認者を書けるため"
+                             "この writer の証拠にならない)"))
+                   (cond
+                     (empty? attributable)
+                     (tdc "warn"
+                          (str "この run では測定できない — 予定登録のみの order が 0 件 "
+                               "(予定登録済みは " (count scheduled) " 件だが全て記録済み)"))
+
+                     (seq with-approver)
                      (tdc "ok" "承認者が記録に残っている")
+
+                     :else
                      (tdc "critical"
-                          (str "予定登録済み " (count scheduled)
-                               " 件のいずれにも承認者キーが無い")))))
+                          (str "対象 " (count attributable)
+                               " 件のいずれにも承認者キーが無い — "
+                               "予定登録の承認者は台帳にしか残らない")))))
 
              (tr (tdt "repo が定義する fact コンストラクタ")
                  (tdt "cropsupport.governor の公開 var を確認した")

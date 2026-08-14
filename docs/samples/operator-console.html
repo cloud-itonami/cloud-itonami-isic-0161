@@ -52,7 +52,7 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
       <tr><td><code>so-1006</code></td><td>farm-104</td><td>除草剤散布(ブロードキャスト)</td><td>日本 (農薬取締法・農林水産省)</td><td>22.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · restricted-entry-interval-violated</span></td></tr>
       <tr><td><code>so-1007</code></td><td>farm-51</td><td>除草剤散布(ブロードキャスト)</td><td>United States (FIFRA / EPA Pesticide Regulation)</td><td>18.75</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · wind-speed-exceeded</span></td></tr>
       <tr><td><code>so-1008</code></td><td>farm-66</td><td>地上防除(殺虫剤散布)</td><td>日本 (農薬取締法・農林水産省)</td><td>9.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · buffer-zone-violated</span></td></tr>
-      <tr><td><code>so-1009</code></td><td>farm-73</td><td>殺菌剤葉面散布</td><td>European Union (Regulation (EC) No 1107/2009 on plant protection products)</td><td>14.0</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · crop-health-flag-unresolved</span></td></tr>
+      <tr><td><code>so-1009</code></td><td>farm-73</td><td>殺菌剤葉面散布</td><td>European Union (Regulation (EC) No 1107/2009 on plant protection products)</td><td>14.0</td><td><span class="warn">あり</span></td><td><span class="warn">予定登録済み・記録前</span></td><td><span class="critical">HARD hold · crop-health-flag-unresolved</span></td></tr>
       <tr><td><code>so-1010</code></td><td>farm-95</td><td>殺菌剤葉面散布</td><td>日本 (農薬取締法・農林水産省)</td><td>6.5</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · evidence-incomplete</span></td></tr>
       <tr><td><code>so-1011</code></td><td>farm-12</td><td>除草剤散布(ブロードキャスト)</td><td>日本 (農薬取締法・農林水産省)</td><td>27.5</td><td><span class="warn">あり</span></td><td><span class="muted">未着手</span></td><td><span class="critical">HARD hold · field-equipment-or-pesticide-decision-blocked</span></td></tr>
       </tbody>
@@ -135,7 +135,7 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
   </section>
   <section>
     <h2>Run trace (this scenario)</h2>
-    <p class="lead">全 23 ステップ。disposition は governor/check の判定そのもので、HARD hold の行は人に上がっていない (approval が書かれていても無視される)。</p>
+    <p class="lead">全 24 ステップ。disposition は governor/check の判定そのもので、HARD hold の行は人に上がっていない (approval が書かれていても無視される)。</p>
     <table>
       <thead><tr><th>#</th><th>ステップ</th><th>Op</th><th>Service order</th><th>確信度</th><th>Disposition</th><th>根拠 / 理由</th></tr></thead>
       <tbody>
@@ -153,21 +153,22 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
       <tr><td>12</td><td>作業記録の登録 (再入場猶予)</td><td><code>log-service-record</code></td><td><code>so-1006</code></td><td>0.89</td><td><span class="critical">HARD hold</span></td><td>restricted-entry-interval-violated</td></tr>
       <tr><td>13</td><td>作業記録の登録 (散布時風速)</td><td><code>log-service-record</code></td><td><code>so-1007</code></td><td>0.94</td><td><span class="critical">HARD hold</span></td><td>wind-speed-exceeded</td></tr>
       <tr><td>14</td><td>作業記録の登録 (緩衝地帯)</td><td><code>log-service-record</code></td><td><code>so-1008</code></td><td>0.9</td><td><span class="critical">HARD hold</span></td><td>buffer-zone-violated</td></tr>
-      <tr><td>15</td><td>作物健全性フラグの起票</td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>0.99</td><td><span class="ok">人が承認</span></td><td>always-escalate-op</td></tr>
-      <tr><td>16</td><td>作業記録の登録 (作物健全性フラグ未解決)</td><td><code>log-service-record</code></td><td><code>so-1009</code></td><td>0.96</td><td><span class="critical">HARD hold</span></td><td>crop-health-flag-unresolved</td></tr>
-      <tr><td>17</td><td>作業記録の登録 (証拠書類)</td><td><code>log-service-record</code></td><td><code>so-1010</code></td><td>0.93</td><td><span class="critical">HARD hold</span></td><td>evidence-incomplete</td></tr>
-      <tr><td>18</td><td>作業記録の登録 (法域引用なし)</td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>0.95</td><td><span class="critical">HARD hold</span></td><td>no-spec-basis</td></tr>
-      <tr><td>19</td><td>散布機の直接操作の要求 (許可外op)</td><td><code>operate-sprayer</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>op-not-allowed</td></tr>
-      <tr><td>20</td><td>予定登録を :commit として主張</td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>effect-not-propose</td></tr>
-      <tr><td>21</td><td>予定登録に圃場機器の直接操作を秘匿</td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
-      <tr><td>22</td><td>作業記録に農薬散布の最終決定を秘匿</td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
-      <tr><td>23</td><td>未登録のservice-orderへの予定登録</td><td><code>schedule-field-operation</code></td><td><code>so-9999</code></td><td>0.9</td><td><span class="critical">HARD hold</span></td><td>service-order-not-registered</td></tr>
+      <tr><td>15</td><td>圃場作業の予定登録 (advisor確信度が低い・記録には至らない)</td><td><code>schedule-field-operation</code></td><td><code>so-1009</code></td><td>0.5</td><td><span class="ok">人が承認</span></td><td>confidence-below-floor</td></tr>
+      <tr><td>16</td><td>作物健全性フラグの起票</td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>0.99</td><td><span class="ok">人が承認</span></td><td>always-escalate-op</td></tr>
+      <tr><td>17</td><td>作業記録の登録 (作物健全性フラグ未解決)</td><td><code>log-service-record</code></td><td><code>so-1009</code></td><td>0.96</td><td><span class="critical">HARD hold</span></td><td>crop-health-flag-unresolved</td></tr>
+      <tr><td>18</td><td>作業記録の登録 (証拠書類)</td><td><code>log-service-record</code></td><td><code>so-1010</code></td><td>0.93</td><td><span class="critical">HARD hold</span></td><td>evidence-incomplete</td></tr>
+      <tr><td>19</td><td>作業記録の登録 (法域引用なし)</td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>0.95</td><td><span class="critical">HARD hold</span></td><td>no-spec-basis</td></tr>
+      <tr><td>20</td><td>散布機の直接操作の要求 (許可外op)</td><td><code>operate-sprayer</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>op-not-allowed</td></tr>
+      <tr><td>21</td><td>予定登録を :commit として主張</td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>effect-not-propose</td></tr>
+      <tr><td>22</td><td>予定登録に圃場機器の直接操作を秘匿</td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>23</td><td>作業記録に農薬散布の最終決定を秘匿</td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>0.99</td><td><span class="critical">HARD hold</span></td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>24</td><td>未登録のservice-orderへの予定登録</td><td><code>schedule-field-operation</code></td><td><code>so-9999</code></td><td>0.9</td><td><span class="critical">HARD hold</span></td><td>service-order-not-registered</td></tr>
       </tbody>
     </table>
   </section>
   <section>
     <h2>Audit ledger (append-only, this run)</h2>
-    <p class="lead">store/audit-trail が返す 29 件。governor-hold の行は cropsupport.governor/hold-fact が構成した本物である。それ以外の fact 種別 (auto-commit / approval-requested / approval-granted / approval-refused) はこの driver が組み立てている — repo は hold-fact 以外の fact コンストラクタを持たない (下の gap 節を参照)。</p>
+    <p class="lead">store/audit-trail が返す 31 件。governor-hold の行は cropsupport.governor/hold-fact が構成した本物である。それ以外の fact 種別 (auto-commit / approval-requested / approval-granted / approval-refused) はこの driver が組み立てている — repo は hold-fact 以外の fact コンストラクタを持たない (下の gap 節を参照)。</p>
     <table>
       <thead><tr><th>#</th><th>Fact</th><th>Op</th><th>Service order</th><th>Disposition</th><th>根拠</th></tr></thead>
       <tbody>
@@ -190,16 +191,18 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
       <tr><td>17</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1006</code></td><td>hold</td><td>restricted-entry-interval-violated</td></tr>
       <tr><td>18</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1007</code></td><td>hold</td><td>wind-speed-exceeded</td></tr>
       <tr><td>19</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1008</code></td><td>hold</td><td>buffer-zone-violated</td></tr>
-      <tr><td>20</td><td><code>approval-requested</code></td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>escalated</td><td>always-escalate-op</td></tr>
-      <tr><td>21</td><td><code>approval-granted</code></td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>approved</td><td>always-escalate-op</td></tr>
-      <tr><td>22</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1009</code></td><td>hold</td><td>crop-health-flag-unresolved</td></tr>
-      <tr><td>23</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1010</code></td><td>hold</td><td>evidence-incomplete</td></tr>
-      <tr><td>24</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>hold</td><td>no-spec-basis</td></tr>
-      <tr><td>25</td><td><code>governor-hold</code></td><td><code>operate-sprayer</code></td><td><code>so-1011</code></td><td>hold</td><td>op-not-allowed</td></tr>
-      <tr><td>26</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>hold</td><td>effect-not-propose</td></tr>
-      <tr><td>27</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>hold</td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
-      <tr><td>28</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>hold</td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
-      <tr><td>29</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-9999</code></td><td>hold</td><td>service-order-not-registered</td></tr>
+      <tr><td>20</td><td><code>approval-requested</code></td><td><code>schedule-field-operation</code></td><td><code>so-1009</code></td><td>escalated</td><td>confidence-below-floor</td></tr>
+      <tr><td>21</td><td><code>approval-granted</code></td><td><code>schedule-field-operation</code></td><td><code>so-1009</code></td><td>approved</td><td>confidence-below-floor</td></tr>
+      <tr><td>22</td><td><code>approval-requested</code></td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>escalated</td><td>always-escalate-op</td></tr>
+      <tr><td>23</td><td><code>approval-granted</code></td><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td>approved</td><td>always-escalate-op</td></tr>
+      <tr><td>24</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1009</code></td><td>hold</td><td>crop-health-flag-unresolved</td></tr>
+      <tr><td>25</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1010</code></td><td>hold</td><td>evidence-incomplete</td></tr>
+      <tr><td>26</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>hold</td><td>no-spec-basis</td></tr>
+      <tr><td>27</td><td><code>governor-hold</code></td><td><code>operate-sprayer</code></td><td><code>so-1011</code></td><td>hold</td><td>op-not-allowed</td></tr>
+      <tr><td>28</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>hold</td><td>effect-not-propose</td></tr>
+      <tr><td>29</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-1011</code></td><td>hold</td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>30</td><td><code>governor-hold</code></td><td><code>log-service-record</code></td><td><code>so-1011</code></td><td>hold</td><td>field-equipment-or-pesticide-decision-blocked</td></tr>
+      <tr><td>31</td><td><code>governor-hold</code></td><td><code>schedule-field-operation</code></td><td><code>so-9999</code></td><td>hold</td><td>service-order-not-registered</td></tr>
       </tbody>
     </table>
   </section>
@@ -235,10 +238,11 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
       <tr><td><code>log-service-record</code></td><td><code>so-1001</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">store/log-service-record (3 引数)</span></td></tr>
       <tr><td><code>schedule-field-operation</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">書けない — store/mark-scheduled は 2 引数</span></td></tr>
       <tr><td><code>log-service-record</code></td><td><code>so-1002</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="ok">store/log-service-record (3 引数)</span></td></tr>
+      <tr><td><code>schedule-field-operation</code></td><td><code>so-1009</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">残らない</span></td><td><span class="critical">書けない — store/mark-scheduled は 2 引数</span></td></tr>
       <tr><td><code>flag-crop-health-concern</code></td><td><code>so-1009</code></td><td><span class="ok">approved-by = farm-ops-lead-1</span></td><td><span class="critical">残らない</span></td><td><span class="critical">書けない — writer が無い</span></td></tr>
       </tbody>
     </table>
-    <p class="lead">実測結果 (部分的欠落): 承認を伴うコミット 4 件のうち 3 件は記録側にも承認者が残るが、1 件は台帳にしか残らない。欠落の内訳 (writer 表から導出): flag-crop-health-concern: store に writer が無く記録自体が変わらない (台帳のみ)。なお最終列が critical の行は、記録に承認者が見えていてもそれを書いたのはその op ではなく、同じ service-order に対する後続の別 op である — この run では該当が 1 件ある。読み手が「誰も承認していない」と「店が承認者を保持していない」を区別できるよう、ここに明示する。これは governance contract を持つセマンティクスなので、このページは開示するだけで修正しない。</p>
+    <p class="lead">実測結果 (部分的欠落): 承認を伴うコミット 5 件のうち 3 件は記録側にも承認者が残るが、2 件は台帳にしか残らない。欠落の内訳 (writer 表から導出): schedule-field-operation: store/mark-scheduled は 2 引数 (store + id) で payload を取らない · flag-crop-health-concern: store に writer が無く記録自体が変わらない (台帳のみ)。なお最終列が critical の行は、記録に承認者が見えていてもそれを書いたのはその op ではなく、同じ service-order に対する後続の別 op である — この run では該当が 1 件ある。読み手が「誰も承認していない」と「店が承認者を保持していない」を区別できるよう、ここに明示する。これは governance contract を持つセマンティクスなので、このページは開示するだけで修正しない。</p>
   </section>
   <section>
     <h2>Scaffold gaps measured on this run</h2>
@@ -248,9 +252,9 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
       <tbody>
       <tr><td>run-operation は成功時に audit fact を返さない</td><td>自動コミットしたステップの (:facts outcome) を数えた</td><td><span class="critical">自動コミット 2 件すべてで fact 0 件 — コミットは台帳に痕跡を残さない</span></td></tr>
       <tr><td>verdict は「なぜ escalate したか」を答えない</td><td>全ステップの verdict の key を和集合にした</td><td><span class="warn">confidence, escalate?, hard?, high-stakes?, ok?, violations</span></td></tr>
-      <tr><td>4つの許可 op のうち store に writer があるのは</td><td>ns-publics 'cropsupport.store と allowed-ops を突き合わせた</td><td><code>flag-crop-health-concern</code> → <span class="critical">writer 無し (台帳のみ)</span><br><code>log-service-record</code> → <span class="ok">store/log-service-record</span><br><code>order-supplies</code> → <span class="critical">writer 無し (台帳のみ)</span><br><code>schedule-field-operation</code> → <span class="ok">store/mark-scheduled</span></td></tr>
+      <tr><td>4つの許可 op のうち store に writer があるのは</td><td>ns-publics 'cropsupport.store と allowed-ops を突き合わせた</td><td><code>flag-crop-health-concern</code> → <span class="critical">writer 無し (台帳のみ)</span><br><code>log-service-record</code> → <span class="ok">store/log-service-record (3 引数)</span><br><code>order-supplies</code> → <span class="critical">writer 無し (台帳のみ)</span><br><code>schedule-field-operation</code> → <span class="ok">store/mark-scheduled (2 引数)</span></td></tr>
       <tr><td>store の公開 API</td><td>ns-publics 'cropsupport.store</td><td><code>append-fact</code> · <code>audit-trail</code> · <code>log-service-record</code> · <code>mark-scheduled</code> · <code>service-order</code> · <code>service-order-already-logged?</code> · <code>service-order-registered?</code></td></tr>
-      <tr><td>store/mark-scheduled は payload を取らない</td><td>予定登録が承認された order の記録に承認者キーがあるか走査した</td><td><span class="ok">承認者が記録に残っている</span></td></tr>
+      <tr><td>store/mark-scheduled は 2 引数 (store + id) で payload を取らない</td><td>予定登録済みだが未記録の order 1 件を走査した (記録済みの order は store/log-service-record が承認者を書けるためこの writer の証拠にならない)</td><td><span class="critical">対象 1 件のいずれにも承認者キーが無い — 予定登録の承認者は台帳にしか残らない</span></td></tr>
       <tr><td>repo が定義する fact コンストラクタ</td><td>cropsupport.governor の公開 var を確認した</td><td><span class="warn">governor/hold-fact のみ。auto-commit / approval-* の fact 形は driver 側が定義している</span></td></tr>
       <tr><td>cropsupport.sim (clojure -M:dev:run)</td><td>このファイルを書く前に実行した</td><td><span class="critical">スタブ (&quot;not yet implemented&quot;) — 再利用できる scenario は無い</span></td></tr>
       <tr><td>langgraph StateGraph</td><td>deps.edn の :deps と cropsupport.advisor を確認した</td><td><span class="warn">:deps {} は空で、:dev の :override-deps は何も override しない。advisor は空のスケルトンで graph builder が無い — この renderer は operation/run-operation の seam を直接駆動する</span></td></tr>
