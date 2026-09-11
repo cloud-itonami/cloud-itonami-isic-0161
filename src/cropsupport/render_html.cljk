@@ -5,7 +5,7 @@
   existed there was no demo page and no generator at all -- this repo's
   own `cropsupport.sim` is still a stub that prints
   `\"CropSupport simulation: not yet implemented.\"` (confirmed by running
-  `clojure -M:dev:run` BEFORE writing this file), so unlike
+  `kbb -M:dev:run` BEFORE writing this file), so unlike
   `cloud-itonami-isic-9522` there was no existing demo scenario to adapt.
   Every scenario step below was authored against this repo's OWN
   vocabulary: the four ops in `cropsupport.governor/allowed-ops`, the
@@ -50,7 +50,7 @@
   question (see the \"scaffold gaps\" section) the page says so, and it
   derives that disclosure by inspecting the run rather than asserting it.
 
-  Usage: `clojure -M:dev:render-html [out-file]`
+  Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
   (:require [clojure.java.io :as io]
             [kotoba.lang.text :as str]
@@ -1001,7 +1001,7 @@
                       (str "governor/hold-fact のみ。"
                            "auto-commit / approval-* の fact 形は driver 側が定義している")))
 
-             (tr (tdt "cropsupport.sim (clojure -M:dev:run)")
+             (tr (tdt "cropsupport.sim (kbb -M:dev:run)")
                  (tdt "このファイルを書く前に実行した")
                  (tdc "critical" "スタブ (\"not yet implemented\") — 再利用できる scenario は無い"))
 
@@ -1048,7 +1048,7 @@
      "  <p>受託作業 (custom farm work) の service-order を、CropSupport Advisor ⊣ "
      "Crop-Support Operations Governor で統制した結果のスナップショット。</p>\n"
      "  <p class=\"badge\">read-only sample · build-time generated · "
-     "<code>clojure -M:dev:render-html</code></p>\n"
+     "<code>kbb -M:dev:render-html</code></p>\n"
      "</header>\n"
      "<main>\n"
      (orders-section store ledger)
