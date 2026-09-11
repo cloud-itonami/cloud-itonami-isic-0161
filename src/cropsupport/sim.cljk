@@ -2,7 +2,7 @@
   "Simulation driver for testing the crop-support-service operations
   actor end-to-end.
 
-  For CLI: clojure -M:dev:run
+  For CLI: kbb -M:dev:run
 
   Example flow:
     1. Start with empty store

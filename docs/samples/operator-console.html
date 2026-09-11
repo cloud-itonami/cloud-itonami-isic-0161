@@ -35,7 +35,7 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
 <header>
   <h1>Support activities for crop production (ISIC Rev.5 0161) — Operator Console</h1>
   <p>受託作業 (custom farm work) の service-order を、CropSupport Advisor ⊣ Crop-Support Operations Governor で統制した結果のスナップショット。</p>
-  <p class="badge">read-only sample · build-time generated · <code>clojure -M:dev:render-html</code></p>
+  <p class="badge">read-only sample · build-time generated · <code>kbb -M:dev:render-html</code></p>
 </header>
 <main>
   <section>
@@ -256,7 +256,7 @@ footer{padding:20px;border-top:1px solid var(--line);color:var(--muted);font-siz
       <tr><td>store の公開 API</td><td>ns-publics 'cropsupport.store</td><td><code>append-fact</code> · <code>audit-trail</code> · <code>log-service-record</code> · <code>mark-scheduled</code> · <code>service-order</code> · <code>service-order-already-logged?</code> · <code>service-order-registered?</code></td></tr>
       <tr><td>store/mark-scheduled は 2 引数 (store + id) で payload を取らない</td><td>予定登録済みだが未記録の order 1 件を走査した (記録済みの order は store/log-service-record が承認者を書けるためこの writer の証拠にならない)</td><td><span class="critical">対象 1 件のいずれにも承認者キーが無い — 予定登録の承認者は台帳にしか残らない</span></td></tr>
       <tr><td>repo が定義する fact コンストラクタ</td><td>cropsupport.governor の公開 var を確認した</td><td><span class="warn">governor/hold-fact のみ。auto-commit / approval-* の fact 形は driver 側が定義している</span></td></tr>
-      <tr><td>cropsupport.sim (clojure -M:dev:run)</td><td>このファイルを書く前に実行した</td><td><span class="critical">スタブ (&quot;not yet implemented&quot;) — 再利用できる scenario は無い</span></td></tr>
+      <tr><td>cropsupport.sim (kbb -M:dev:run)</td><td>このファイルを書く前に実行した</td><td><span class="critical">スタブ (&quot;not yet implemented&quot;) — 再利用できる scenario は無い</span></td></tr>
       <tr><td>langgraph StateGraph</td><td>deps.edn の :deps と cropsupport.advisor を確認した</td><td><span class="warn">:deps {} は空で、:dev の :override-deps は何も override しない。advisor は空のスケルトンで graph builder が無い — この renderer は operation/run-operation の seam を直接駆動する</span></td></tr>
       </tbody>
     </table>
