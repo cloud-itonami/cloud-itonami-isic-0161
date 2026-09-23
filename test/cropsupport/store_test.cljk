@@ -1,5 +1,5 @@
 (ns cropsupport.store-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [cropsupport.store :as store]))
 
 ;; ──────────────────────── Service-Order Retrieval ──────────────────────
