@@ -27,7 +27,7 @@
       maximum safe wind speed (spray-drift risk), and minimum buffer zone
       (distance to sensitive sites such as water bodies, schools, or
       residences)."
-  (:require [clojure.set :as set]))
+  (:require [kotoba.lang.coll :as set]))
 
 (def service-types
   "Valid crop-support-service categories and their safety windows.
